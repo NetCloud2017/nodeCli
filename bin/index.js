@@ -5,7 +5,7 @@ console.log("hello worlb  cli");
 
 //  npm link  让这个包临时注册到这个电脑的盘里， 然后可以在终端里运行 bin 里的命令了 如 当前的 cus-cli ， node 就会执行这个index.js 文件
 
-const { Command, program } = require("commander");
+const { program } = require("commander");
 const inquirer = require("inquirer");
 const { devRollup } = require("./rollup");
 program

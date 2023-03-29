@@ -1,5 +1,5 @@
 const path = require("path");
-const babel = require("rollup-plugin-babel");
+const babel = require("@rollup/plugin-babel");
 const livereload = require("rollup-plugin-livereload");
 const serve = require("rollup-plugin-serve");
 const babelConfig = require("./babel.config");
