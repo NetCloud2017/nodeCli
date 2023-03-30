@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// 爪哇的
 // 用于指明 用node 来解析这个应用程序。
 console.log("hello worlb  cli");
 
