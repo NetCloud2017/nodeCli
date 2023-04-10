@@ -2,9 +2,9 @@
   "name": "nodecli",
   "version": "1.0.0",
   "description": "\"# node cli\"",
-  "main": "bin/cliEntry.js",
+  "main": "./bin/lsIndex.js",
   "bin": {
-    "ccli": "bin/cliEntry.js"
+    "ccli": "./bin/lsIndex.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
