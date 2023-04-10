@@ -19,6 +19,50 @@ function parse() {
     isList,
   };
 }
+function outh(mode) {
+  // 文件权限
+  let outhString = "";
+  // user 权限
+  const userCanRead = mode & fs.constants.S_IRUSR;
+  const userCanWrite = mode & fs.constants.S_IWUSR;
+  const userCanExecute = mode & fs.constants.S_IXUSR; // 是否可执行
+
+  userCanRead ? (outhString += "r") : (outhString += "-");
+  userCanWrite ? (outhString += "w") : (outhString += "_");
+  userCanExecute ? (outhString += "x") : (outhString += "-");
+  // 用户组 权限
+  const groupCanRead = mode & fs.constants.S_IRUSR;
+  const groupCanWrite = mode & fs.constants.S_IWUSR;
+  const groupCanExecute = mode & fs.constants.S_IXUSR; // 是否可执行
+
+  groupCanRead ? (outhString += "r") : (outhString += "-");
+  groupCanWrite ? (outhString += "w") : (outhString += "_");
+  groupCanExecute ? (outhString += "x") : (outhString += "-");
+
+  // 其他用户权限
+  const otherUserCanRead = mode & fs.constants.S_IRUSR;
+  const otherUserCanWrite = mode & fs.constants.S_IWUSR;
+  const otherUserCanExecute = mode & fs.constants.S_IXUSR; // 是否可执行
+
+  otherUserCanRead ? (outhString += "r") : (outhString += "-");
+  otherUserCanWrite ? (outhString += "w") : (outhString += "_");
+  otherUserCanExecute ? (outhString += "x") : (outhString += "-");
+
+  return outhString;
+}
+function getFileType(mode) {
+  const isDirectory = mode & fs.constants.S_IFDIR;
+  const isFile = mode & fs.constants.S_IFREG;
+  const isLink = mode & fs.constants.S_IFLNK;
+
+  if (isDirectory) {
+    return "d";
+  } else if (isFile) {
+    return "-";
+  } else {
+    return "l";
+  }
+}
 const { isAll, isList, args } = parse();
 const dir = process.cwd();
 let files = fs.readdirSync(dir);
@@ -31,10 +75,16 @@ if (!isList) {
   files.forEach((file) => (output += file + "       "));
 } else {
   files.forEach((file, index) => {
+    const stat = fs.statSync(file);
+    const mode = stat.mode;
+    const fileType = getFileType(mode);
+    const outhString = outh(mode);
+
+    // stat.isDirectory() // stat 也可以用于判断文件是不文件夹
     if (index === files.length - 1) {
-      output += file;
+      output += fileType + outhString + "\t" + file;
     } else {
-      output += file + "\n";
+      output += fileType + outhString + "\t" + file + "\n";
     }
   });
 }
