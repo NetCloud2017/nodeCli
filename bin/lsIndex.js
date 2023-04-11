@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// 获取权限和 获取用户 uid 和 gid 没有搞好。
 const fs = require("fs");
 const cp = require("child_process");
 
@@ -33,18 +34,18 @@ function outh(mode) {
   userCanWrite ? (outhString += "w") : (outhString += "_");
   userCanExecute ? (outhString += "x") : (outhString += "-");
   // 用户组 权限
-  const groupCanRead = mode & fs.constants.S_IRUSR;
-  const groupCanWrite = mode & fs.constants.S_IWUSR;
-  const groupCanExecute = mode & fs.constants.S_IXUSR; // 是否可执行
+  const groupCanRead = mode & fs.constants.S_IRGRP;
+  const groupCanWrite = mode & fs.constants.S_IWGRP;
+  const groupCanExecute = mode & fs.constants.S_IXGRP; // 是否可执行
 
   groupCanRead ? (outhString += "r") : (outhString += "-");
   groupCanWrite ? (outhString += "w") : (outhString += "_");
   groupCanExecute ? (outhString += "x") : (outhString += "-");
 
   // 其他用户权限
-  const otherUserCanRead = mode & fs.constants.S_IRUSR;
-  const otherUserCanWrite = mode & fs.constants.S_IWUSR;
-  const otherUserCanExecute = mode & fs.constants.S_IXUSR; // 是否可执行
+  const otherUserCanRead = mode & fs.constants.S_IROTH;
+  const otherUserCanWrite = mode & fs.constants.S_IWOTH;
+  const otherUserCanExecute = mode & fs.constants.S_IXOTH; // 是否可执行
 
   otherUserCanRead ? (outhString += "r") : (outhString += "-");
   otherUserCanWrite ? (outhString += "w") : (outhString += "_");
@@ -53,16 +54,18 @@ function outh(mode) {
   return outhString;
 }
 function getFileType(mode) {
-  const isDirectory = mode & fs.constants.S_IFDIR;
-  const isFile = mode & fs.constants.S_IFREG;
-  const isLink = mode & fs.constants.S_IFLNK;
-
+  const isDirectory = (mode & fs.constants.S_IFDIR) === fs.constants.S_IFDIR;
+  const isFile = (mode & fs.constants.S_IFREG) === fs.constants.S_IFREG;
+  const isLink = (mode & fs.constants.S_IFLNK) === fs.constants.S_IFLNK;
+  console.log(isDirectory, isFile, isLink, fs.constants.S_IFDIR, "filetype");
   if (isDirectory) {
     return "d";
+  } else if (isLink) {
+    return "l";
   } else if (isFile) {
     return "-";
   } else {
-    return "l";
+    return "-";
   }
 }
 

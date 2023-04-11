@@ -7,7 +7,7 @@
     "ccli": "./bin/lsIndex.js"
   },
   "scripts": {
-    "test": "mocha ./test/testCommand.js"
+    "test": "mocha test/test.js"
   },
   "repository": {
     "type": "git",
