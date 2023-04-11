@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const fs = require("fs");
+const cp = require("child_process");
+
 function parse() {
   let isAll = false; //  -a
   let isList = false; // -l
@@ -10,7 +12,7 @@ function parse() {
       isAll = true;
     }
     if (arg.indexOf("l") >= 0) {
-      isList = true;
+      isList = t;
     }
   });
   return {
@@ -63,6 +65,30 @@ function getFileType(mode) {
     return "l";
   }
 }
+
+function getFileCreater(stat) {
+  const { uid, gid } = stat;
+  console.log(stat, "uus");
+  /** $
+   * @有问题获取不到uid和gid
+   * */
+  //   let userName = cp.execSync("id -un " + uid); // 通过 id 这个库获取用户名， 返回来的是Buffer
+  //   userName = userName.toString().trim();
+  //   const groupIdsStr = cp
+  //     .execSync("id -G " + uid)
+  //     .toString()
+  //     .trim();
+  //   const groupIds = groupIdsStr.split(" ");
+  //   const groupIdsNameStr = cp
+  //     .execSync("id -Gn " + uid)
+  //     .toString()
+  //     .trim();
+  //   const groupIdsNames = groupIdsNameStr.split(" ");
+  //   const groupIndex = groupIds.findIndex((id) => +id === +gid);
+
+  //   const groupName = groupIdsNames[groupIndex];
+  //   return userName + "  " + groupName;
+}
 const { isAll, isList, args } = parse();
 const dir = process.cwd();
 let files = fs.readdirSync(dir);
@@ -74,17 +100,19 @@ if (!isList) {
   // 去除 .开头的文件
   files.forEach((file) => (output += file + "       "));
 } else {
+  console.log(files);
   files.forEach((file, index) => {
     const stat = fs.statSync(file);
     const mode = stat.mode;
     const fileType = getFileType(mode);
     const outhString = outh(mode);
+    const fileCreater = getFileCreater(stat);
 
     // stat.isDirectory() // stat 也可以用于判断文件是不文件夹
     if (index === files.length - 1) {
-      output += fileType + outhString + "\t" + file;
+      output += fileType + outhString + "\t" + fileCreater + "\t" + file;
     } else {
-      output += fileType + outhString + "\t" + file + "\n";
+      output += fileType + outhString + "\t" + fileCreater + "\t" + file + "\n";
     }
   });
 }
