@@ -12,7 +12,7 @@ function parse() {
       isAll = true;
     }
     if (arg.indexOf("l") >= 0) {
-      isList = t;
+      isList = true;
     }
   });
   return {
@@ -89,6 +89,15 @@ function getFileCreater(stat) {
   //   const groupName = groupIdsNames[groupIndex];
   //   return userName + "  " + groupName;
 }
+
+function getBirthTime({ mtimeMs: birthtimeMs, size }) {
+  const birthTime = new Date(birthtimeMs);
+  const month = birthTime.getMonth() + 1;
+  const date = birthTime.getDate();
+  const hour = birthTime.getHours();
+  const min = birthTime.getMinutes();
+  return size + " " + month + "月  " + date + " " + hour + ":" + min;
+}
 const { isAll, isList, args } = parse();
 const dir = process.cwd();
 let files = fs.readdirSync(dir);
@@ -102,17 +111,43 @@ if (!isList) {
 } else {
   console.log(files);
   files.forEach((file, index) => {
+    let fileNums = 1;
     const stat = fs.statSync(file);
+    const isDirectory = stat.isDirectory();
+    if (isDirectory) {
+      fileNums = fs.readdirSync(file).length;
+    }
     const mode = stat.mode;
     const fileType = getFileType(mode);
     const outhString = outh(mode);
     const fileCreater = getFileCreater(stat);
-
+    const birthTime = getBirthTime(stat);
     // stat.isDirectory() // stat 也可以用于判断文件是不文件夹
     if (index === files.length - 1) {
-      output += fileType + outhString + "\t" + fileCreater + "\t" + file;
+      output +=
+        fileType +
+        outhString +
+        " " +
+        fileNums +
+        "\t" +
+        fileCreater +
+        "\t" +
+        birthTime +
+        "\t" +
+        file;
     } else {
-      output += fileType + outhString + "\t" + fileCreater + "\t" + file + "\n";
+      output +=
+        fileType +
+        outhString +
+        " " +
+        fileNums +
+        "\t" +
+        fileCreater +
+        "\t" +
+        birthTime +
+        "\t" +
+        file +
+        "\n";
     }
   });
 }
