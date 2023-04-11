@@ -153,3 +153,10 @@ if (!isList) {
 }
 
 console.log(output);
+
+module.exports = {
+  parse,
+  getBirthTime,
+  getFileCreater,
+  getFileType,
+};

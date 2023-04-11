@@ -7,7 +7,7 @@
     "ccli": "./bin/lsIndex.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test/testCommand.js"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,8 @@
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-serve": "^2.0.2",
     "semver": "^7.3.8"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
   }
 }
