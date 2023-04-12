@@ -2,7 +2,7 @@
   "name": "nodecli",
   "version": "1.0.0",
   "description": "\"# node cli\"",
-  "main": "./bin/lsIndex.js",
+  "main": "./bin/command.js",
   "bin": {
     "ccli": "./bin/command.js"
   },
