@@ -4,8 +4,11 @@ const { program } = require("commander");
 
 program.name("ccli").description("cli name").version("0.1.0");
 
-program.option("--first").option("-s, --separator <char>");
-
+program
+  .option("--first") // 一般选项；值都是 字符串或者布尔值
+  .option("-a, --age") // 简写和全写。
+  .option("-s, --separator <char>") // 必填产生 <char>
+  .option("-n, --name [char]"); // 选填参数 [char]
 program.parse();
 
 const options = program.opts();
