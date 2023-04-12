@@ -4,7 +4,7 @@
   "description": "\"# node cli\"",
   "main": "./bin/lsIndex.js",
   "bin": {
-    "ccli": "./bin/command.js"
+    "ccli": "./bin/lsIndex.js"
   },
   "scripts": {
     "test": "mocha test/test.js"
