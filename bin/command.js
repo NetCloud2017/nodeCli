@@ -61,9 +61,25 @@ programInstance
 
 // 注意带参数的option 的连写问题， 一般将带参数的option 放到最后， 否则他会把后面的当成自己的参数。
 //  ccli split 111 -dag 把 g 当成自己的参数了。
+
+// 全局 options
 programInstance
   .option("-d --debug", "debugging")
-  .option("-g --global", "global");
+  .option("-g --global", "global")
+  .hook("preAction", function (thisCommand, actionCommand) {
+    // 这个 preAction 的执行时间比 子命令的还要早
+    console.log(4);
+    // 这个 thisCommand 就是 programInstance, actonCommand 是执行当前某个子命令的 command 实例
+    console.log(
+      thisCommand === programInstance,
+      actionCommand.opts(),
+      "global action hook"
+    );
+  })
+  .hook("postAction", function (thisCommand, actionCommand) {
+    // 这个 postAction 的执行时间比 子命令的还要晚
+    console.log(5);
+  });
 
 programInstance
   .command("create")
@@ -150,22 +166,39 @@ programInstance
   .arguments("<username> [password]")
 
   // 通过构造函数添加参数。
-  .addArgument(
-    new commander.Argument("username", "username to login")
-      .argRequired() // 必填参数 argRequired  就算是[] 也要 填。
-      .choices(["sam", "niko"]) // 选项功能
-  )
-  .addArgument(
-    new commander.Argument("password", "password to login")
-      .argOptional()
-      .default("12353", "default password") // 默认值
-      .argParser(parseMyInt) // 参数处理
-  )
+  //   .addArgument(
+  //     new commander.Argument("username", "username to login")
+  //       .argRequired() // 必填参数 argRequired  就算是[] 也要 填。
+  //       .choices(["sam", "niko"]) // 选项功能
+  //   )
+  //   .addArgument(
+  //     new commander.Argument("password", "password to login")
+  //       .argOptional()
+  //       .default("12353", "default password") // 默认值
+  //       .argParser(parseMyInt) // 参数处理
+  //   )
   .option("-f, --force", "force login")
   //   .action((username, password, options) => {
-  .action((username, password, dir, options) => {
-    // 子命令参数， 不管写不写都会独占这两个参数位。
-    console.log(username, password, options);
+  //   .action((username, password, dir, options) => {
+
+  // 子命令参数， 不管写不写都会独占这两个参数位。
+  // console.log(username, password, options);
+  //   });
+
+  .action(function (username, password, optinos) {
+    // this 就是 zhege command 实例
+    console.log(1, this.args[0], this.args[1], this.opts());
+  })
+
+  // hook
+
+  // 在 action 执行前执行
+  .hook("preAction", function (thisCommand, actionCommand) {
+    console.log(2, thisCommand === actionCommand);
+  })
+  // 在 action 执行后执行
+  .hook("postAction", function (thisCommand, actionCommand) {
+    console.log(thisCommand === actionCommand, 3);
   });
 programInstance.parse();
 
