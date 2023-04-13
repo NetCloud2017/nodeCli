@@ -33,8 +33,28 @@ programInstance
   .argument("<string>", "string  to split") // 子命令的参数
   .option("--first") // 子命令的选项
   .option("-s, --separator <char>", "separator char", "|") // "|" 是 option 默认值
-  .action((arg, options) => {
+  .action((arg, options, cmd) => {
     console.log(arg, options, "uuus"); // arg 就是 <string>, options 就是对应的 optinos。
+
+    // action 里获取全局对象
+    // 1
+    let a = programInstance.getOptionValue("a");
+    console.log(a, "a");
+    // 2
+    let globalOptions = programInstance.commands[0].optsWithGlobals();
+    console.log(globalOptions);
+    // 3
+    console.log(cmd.opts());
+    console.log(cmd.optsWithGlobals());
   });
 
+// options的四种用法
+programInstance
+  .option("-a <char>") // 全局 的option
+  .option("-a<char>")
+  .option("--age=<char>")
+  .option("--age <char>");
+
 programInstance.parse();
+const globalOptions = programInstance.optsWithGlobals(); // 获取全局 option
+console.log(globalOptions, "uuu");
