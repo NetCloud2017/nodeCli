@@ -2,9 +2,9 @@
   "name": "nodecli",
   "version": "1.0.0",
   "description": "\"# node cli\"",
-  "main": "./bin/command.js",
+  "main": "./bin/_index.js",
   "bin": {
-    "ccli": "./bin/command.js"
+    "ccli": "./bin/_index.js"
   },
   "scripts": {
     "test": "mocha test/test.js"
