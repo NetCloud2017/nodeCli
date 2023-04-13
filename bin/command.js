@@ -98,9 +98,35 @@ programInstance
     ])
   ) // 选项功能
   .addOption(new Option("-p --port <number>", "port number").env("PORT")) // env 通过环境变量获取值当作 port 的值。
-  //  PORT=80 ccli test -t 11 -s 需要写到前面。否则无效。
+  //  PORT=80 ccli test -t 11 -s 环境变量需要写到前面。否则无效。
+  .addOption(
+    new Option("--donate [amount]", "donation in dollars")
+      .preset("66") // 预设值
+      .argParser(parseFloat) // 参数处理 成数字
+  )
+  .addOption(new Option("--disable-server", "disable server").conflicts("port")) // 注明和那个选项冲突，只能有其中一个。
+  .addOption(
+    new Option("-a, --add", "add  option").conflicts(["port", "choice"])
+  ) // 和多个选项冲突。
   .action((options, cmd) => {
     console.log(options, cmd.optsWithGlobals());
+  });
+
+// 自定义 option
+const commander = require("commander");
+
+function parseMyInt(value) {
+  const intValue = parseInt(value, 10);
+  if (isNaN(intValue)) {
+    throw new commander.InvalidOptionArgumentError("not a  int Number");
+  }
+  return intValue;
+}
+programInstance
+  .command("custom")
+  .option("-i, integer <number>", "input number", parseMyInt)
+  .action((arg, option) => {
+    console.log(arg, "sss");
   });
 programInstance.parse();
 
