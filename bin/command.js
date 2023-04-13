@@ -122,9 +122,17 @@ function parseMyInt(value) {
   }
   return intValue;
 }
+function collect(value, previous) {
+  return previous.concat([value]);
+}
+function list(value) {
+  return value.split(" ");
+}
 programInstance
   .command("custom")
   .option("-i, integer <number>", "input number", parseMyInt)
+  .option("-l, --list <item>", "list", list) // 参数收集 1  ccli custom -l 'a b c'
+  .option("-c, --collect <value>", "collect", collect, []) // 参数收集 2  ccli custom -c a -c b -c c
   .action((arg, option) => {
     console.log(arg, "sss");
   });
