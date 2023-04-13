@@ -71,6 +71,12 @@ programInstance
   .argument("<char>", "create arg")
   .requiredOption("-t, --ttt <char>", "template") // 必须的 options，注意，加了默认值就没效了。不能加默认值
   .option("-a, --add", "add number")
+
+  .option("-l, --letters <char...>", "specify letters")
+  // 注意与命令的 arguments 问题 用 -- 隔开参数例如:
+  // ccli create  -d -t u77 -l a b c 777 报错 没有 arguments
+  // ccli create  -d -t u77 -l a b c -- 777
+
   .action((arg, options) => {
     console.log(arg, options, "create command");
   });
