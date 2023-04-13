@@ -136,6 +136,37 @@ programInstance
   .action((arg, option) => {
     console.log(arg, "sss");
   });
+
+programInstance
+  //   .command("login <username> [password]", { hidden: false, isDefault: true }) // hidden 是否隐藏命令，isDefault 不写子命令时默认时这个命令。
+
+  // argument 方式定义参数
+  .command("login", { hidden: false, isDefault: true })
+  //   .argument("<username>", "username to login")
+  //   .argument("[password]", "password to login", "no password") // 参数默认值
+  //   .argument("<dir...>", "rest arguments") // ccli  login name  a b c  分开时数组
+
+  // arguments 方式添加参数
+  .arguments("<username> [password]")
+
+  // 通过构造函数添加参数。
+  .addArgument(
+    new commander.Argument("username", "username to login")
+      .argRequired() // 必填参数 argRequired  就算是[] 也要 填。
+      .choices(["sam", "niko"]) // 选项功能
+  )
+  .addArgument(
+    new commander.Argument("password", "password to login")
+      .argOptional()
+      .default("12353", "default password") // 默认值
+      .argParser(parseMyInt) // 参数处理
+  )
+  .option("-f, --force", "force login")
+  //   .action((username, password, options) => {
+  .action((username, password, dir, options) => {
+    // 子命令参数， 不管写不写都会独占这两个参数位。
+    console.log(username, password, options);
+  });
 programInstance.parse();
 
 const globalOptions = programInstance.optsWithGlobals(); // 获取全局 option
