@@ -89,9 +89,9 @@ programInstance
       60,
       "one minute"
     )
-  ) // 默认值
+  ) // 默认值 和默认值提示
   .addOption(
-    new Option("-c --choice [choice]", "your choice").choices([
+    new Option("-c --choice <choice>", "your choice").choices([
       "small",
       "medium",
       "large",
