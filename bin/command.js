@@ -22,7 +22,7 @@
 
 // 创建子命令
 // version 2
-const { Command } = require("commander");
+const { Command, Option } = require("commander");
 const programInstance = new Command();
 
 // commander 自动给每一个命令生成对应的文档，还有命令输入错误时的，模糊匹配提示。
@@ -81,6 +81,28 @@ programInstance
     console.log(arg, options, "create command");
   });
 
+programInstance
+  .command("test")
+  .addOption(new Option("-s, --select", "select, something").hideHelp()) // 隐藏 选项
+  .addOption(
+    new Option("-t, --timeout <delay>", "timeout seconds").default(
+      60,
+      "one minute"
+    )
+  ) // 默认值
+  .addOption(
+    new Option("-c --choice [choice]", "your choice").choices([
+      "small",
+      "medium",
+      "large",
+    ])
+  ) // 选项功能
+  .addOption(new Option("-p --port <number>", "port number").env("PORT")) // env 通过环境变量获取值当作 port 的值。
+  //  PORT=80 ccli test -t 11 -s 需要写到前面。否则无效。
+  .action((options, cmd) => {
+    console.log(options, cmd.optsWithGlobals());
+  });
 programInstance.parse();
+
 const globalOptions = programInstance.optsWithGlobals(); // 获取全局 option
 console.log(globalOptions, "uuu");
