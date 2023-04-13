@@ -49,12 +49,22 @@ programInstance
   });
 
 // options的四种用法
+// 不能只获取全局options 需要带上一个子命令；//  ccli split 111 -a a
 programInstance
   .option("-a <char>") // 全局 的option
   .option("-a<char>")
   .option("--age=<char>")
   .option("--age <char>");
 
+// options 连写
+//  ccli split 111 -a a -dg
+
+// 注意带参数的option 的连写问题， 一般将带参数的option 放到最后， 否则他会把后面的当成自己的参数。
+//  ccli split 111 -dag 把 g 当成自己的参数了。
+programInstance
+  .option("-d --debug", "debugging")
+  .option("-g --global", "global");
+//
 programInstance.parse();
 const globalOptions = programInstance.optsWithGlobals(); // 获取全局 option
 console.log(globalOptions, "uuu");
