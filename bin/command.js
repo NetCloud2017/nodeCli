@@ -64,7 +64,17 @@ programInstance
 programInstance
   .option("-d --debug", "debugging")
   .option("-g --global", "global");
-//
+
+programInstance
+  .command("create")
+  .description("creata  project")
+  .argument("<char>", "create arg")
+  .requiredOption("-t, --ttt <char>", "template") // 必须的 options，注意，加了默认值就没效了。不能加默认值
+  .option("-a, --add", "add number")
+  .action((arg, options) => {
+    console.log(arg, options, "create command");
+  });
+
 programInstance.parse();
 const globalOptions = programInstance.optsWithGlobals(); // 获取全局 option
 console.log(globalOptions, "uuu");
