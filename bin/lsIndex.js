@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
+/**
+ * @模仿一个ls命令
+ */
+
 // 获取权限和 获取用户 uid 和 gid 没有搞好。
 const fs = require("fs");
 const cp = require("child_process");
-const { log } = require("console");
 
 function parse() {
   let isAll = false; //  -a
@@ -78,22 +81,22 @@ function getFileCreater(stat) {
   let userName = cp.execSync("id -un " + uid); // 通过 id 这个库获取用户名， 返回来的是Buffer
   userName = userName.toString().trim();
   console.log(userName, "uus");
-    
-    const groupIdsStr = cp
-      .execSync("id -G " + uid)
-      .toString()
-      .trim();
-    const groupIds = groupIdsStr.split(" ");
-    const groupIdsNameStr = cp
-      .execSync("id -Gn " + uid)
-      .toString()
-      .trim();
-    const groupIdsNames = groupIdsNameStr.split(" ");
-    const groupIndex = groupIds.findIndex((id) => +id === +gid);
 
-    const groupName = groupIdsNames[groupIndex];
-    console.log(groupName, 'uusxx');
-    return userName + "  " + groupName;
+  const groupIdsStr = cp
+    .execSync("id -G " + uid)
+    .toString()
+    .trim();
+  const groupIds = groupIdsStr.split(" ");
+  const groupIdsNameStr = cp
+    .execSync("id -Gn " + uid)
+    .toString()
+    .trim();
+  const groupIdsNames = groupIdsNameStr.split(" ");
+  const groupIndex = groupIds.findIndex((id) => +id === +gid);
+
+  const groupName = groupIdsNames[groupIndex];
+  console.log(groupName, "uusxx");
+  return userName + "  " + groupName;
 }
 
 function getBirthTime({ mtimeMs: birthtimeMs, size }) {
