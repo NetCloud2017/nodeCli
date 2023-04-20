@@ -11,7 +11,14 @@ module.exports = function (api, options) {
    const dir = process.cwd();
 
    // mode
-   const mode = process.env.MODE || "development";
+   const cmd = api.getCommand();
+
+   let mode;
+   if (cmd === "build") {
+      mode = "production";
+   } else {
+      mode = process.env.MODE || "development";
+   }
    config.mode(mode);
 
    // 设置entry
